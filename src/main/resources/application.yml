@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+  application:
+    name: WebFluxStudy
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  datasource:
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10000
+    url: jdbc:mysql://localhost:3306/fluxstudy?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: flux
+    password: password
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+cors:
+  url: http://localhost:8081
+application:
+  jwt:
+    privateKey: src/main/resources/token_key.pem
+
+
+
