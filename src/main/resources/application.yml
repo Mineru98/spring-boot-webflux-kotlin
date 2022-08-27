@@ -20,13 +20,14 @@ spring:
     url: jdbc:mysql://localhost:3308/fluxstudy?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: password
-#  jpa:
-#    open-in-view: true
-#    hibernate:
-#      ddl-auto: update
-#      naming:
-#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#    show-sql: true
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
 cors:
   url: http://localhost:8081
 application:
