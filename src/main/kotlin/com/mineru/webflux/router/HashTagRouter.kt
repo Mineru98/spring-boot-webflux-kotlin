@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.router
 @Configuration
 class HashTagRouter (private val hashTagHandler: HashTagHandler) {
     @Bean
-    fun routerUser() = nest(path("/tags"),
+    fun routerHashTag() = nest(path("/tags"),
             router {
                 listOf(
                         GET("", hashTagHandler::getAll),

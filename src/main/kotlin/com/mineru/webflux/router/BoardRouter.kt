@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.router
 @Configuration
 class BoardRouter (private val boardHandler: BoardHandler) {
     @Bean
-    fun routerUser() = nest(path("/boards"),
+    fun routerBoard() = nest(path("/boards"),
             router {
                 listOf(
                         GET("", boardHandler::getAll),

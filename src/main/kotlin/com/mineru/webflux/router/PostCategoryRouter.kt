@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.router
 @Configuration
 class PostCategoryRouter (private val postCategoryHandler: PostCategoryHandler) {
     @Bean
-    fun routerUser() = nest(path("/post/categories"),
+    fun routerPostCategory() = nest(path("/post/categories"),
             router {
                 listOf(
                         GET("", postCategoryHandler::getAll),

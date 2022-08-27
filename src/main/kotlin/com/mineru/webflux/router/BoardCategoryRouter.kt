@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.router
 @Configuration
 class BoardCategoryRouter (private val boardCategoryHandler: BoardCategoryHandler) {
     @Bean
-    fun routerUser() = nest(path("/board/categories"),
+    fun routerBoardCategory() = nest(path("/board/categories"),
             router {
                 listOf(
                         GET("", boardCategoryHandler::getAll),
