@@ -1,19 +1,5 @@
 version: "3.3"
 services:
-  cluster0:
-    image: 211.220.197.187:6666/eroum-be:0.9.1
-    ports:
-      - "8080:8080"
-    container_name: eroum-be
-    restart: always
-    environment:
-      TZ: Asia/Seoul
-      SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://172.21.0.1:3306/eroum?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      SPRING_DATASOURCE_USERNAME: flux
-      SPRING_DATASOURCE_PASSWORD: password
-    external_links:
-      - 172.21.0.1
   mysql_db:
     image: mysql:5.7.33
     container_name: db
