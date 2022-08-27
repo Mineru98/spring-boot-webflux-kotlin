@@ -28,11 +28,6 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
     show-sql: true
-cors:
-  url: http://localhost:8081
-application:
-  jwt:
-    privateKey: src/main/resources/token_key.pem
 
 
 
