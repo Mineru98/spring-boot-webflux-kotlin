@@ -50,7 +50,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-	implementation("com.googlecode.json-simple:json-simple")
+	implementation("com.googlecode.json-simple:json-simple:1.1.1")
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	compileOnly("org.projectlombok:lombok")
