@@ -6,6 +6,10 @@ import com.mineru.webflux.domain.PostCategory.PostCategory
 import com.mineru.webflux.domain.User.User
 import lombok.*
 import org.hibernate.annotations.Comment
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.relational.core.mapping.Table
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.stereotype.Repository
 import javax.persistence.*
 
 @Builder
@@ -18,6 +22,7 @@ import javax.persistence.*
 @Table(name = "HashTag")
 class Post {
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnPosition(1)
     val id: Long? = null
@@ -60,4 +65,11 @@ class Post {
     @ManyToOne
     @ColumnPosition(8)
     val writer: User? = null
+}
+
+@Repository
+interface PostRepository: JpaRepository<Post, Long?> {
+}
+
+interface PostReactiveRepository: ReactiveCrudRepository<Post, Long?> {
 }

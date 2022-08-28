@@ -1,61 +1,57 @@
 package com.mineru.webflux.handler
 
+import com.mineru.webflux.domain.User.Dto.CreateUserDto
 import com.mineru.webflux.domain.User.User
-import com.mineru.webflux.domain.User.UserRepository
+import com.mineru.webflux.domain.User.UserReactiveRepository
+import org.springframework.context.annotation.Lazy
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.ServerResponse.notFound
+import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.*
 
 @Component
-class UserHandler(private val userRepository: UserRepository) {
+class UserHandler(@Lazy private val userReactiveRepository: UserReactiveRepository) {
 
-    fun getAll(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body<List<User>>(Mono.just(userRepository.findAll()))
-            .switchIfEmpty(ServerResponse.notFound().build())
+    @Transactional(readOnly = true)
+    fun getAll(): Flux<User> {
+        return userReactiveRepository.findAll()
+    }
 
-    fun getById(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
+    @Transactional(readOnly = true)
+    fun getById(req: ServerRequest): Mono<ServerResponse> = ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body<User>(Mono.just(userRepository.findById(req.pathVariable("id").toLong())))
-            .switchIfEmpty(ServerResponse.notFound().build())
+            .body<User>(Mono.just(userReactiveRepository.findById(req.pathVariable("id").toLong())))
+            .switchIfEmpty(notFound().build())
 
-    fun save(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(req.bodyToMono(User::class.java)
-                    .switchIfEmpty(Mono.empty())
-                    .filter(Objects::nonNull)
-                    .flatMap { user ->
-                        Mono.fromCallable {
-                            userRepository.save(user)
-                        }.then(Mono.just(user))
-                    }
-            ).switchIfEmpty(ServerResponse.notFound().build())
+    @Transactional
+    fun save(createUserDto: CreateUserDto): Mono<User> {
+        val user = createUserDto.toEntity()
+        return userReactiveRepository.save(user)
+    }
 
-    fun modifyById(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(Mono.justOrEmpty(userRepository.findById(req.pathVariable("id").toLong()))
-                    .switchIfEmpty(Mono.empty())
-                    .filter(Objects::nonNull)
-                    .flatMap { user ->
-                        Mono.fromCallable {
-                            userRepository.save(user)
-                        }.then(Mono.just(user))
-                    }
-            ).switchIfEmpty(ServerResponse.notFound().build())
+    @Transactional
+    fun modifyById(req: ServerRequest): Mono<ServerResponse> =
+        userReactiveRepository.findById(req.pathVariable("id").toLong())
+            .filter(Objects::nonNull)
+            .flatMap { user ->
+                userReactiveRepository.save(user)
+            }
+            .flatMap {
+                it?.let { ok().build() }
+            }
+            .switchIfEmpty(notFound().build())
 
-    fun deleteById(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(Mono.justOrEmpty(userRepository.findById(req.pathVariable("id").toLong()))
-                    .switchIfEmpty(Mono.empty())
-                    .filter(Objects::nonNull)
-                    .flatMap { user ->
-                        Mono.fromCallable {
-                            userRepository.delete(user)
-                        }.then(Mono.just(user))
-                    }
-            ).switchIfEmpty(ServerResponse.notFound().build())
+    @Transactional
+    fun deleteById(req: ServerRequest): Mono<ServerResponse> =
+        userReactiveRepository.findById(req.pathVariable("id").toLong())
+            .filter(Objects::nonNull)
+            .flatMap { user -> ok().build(userReactiveRepository.deleteById(user.id!!)) }
+            .switchIfEmpty(notFound().build())
 }

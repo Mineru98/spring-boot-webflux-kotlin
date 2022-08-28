@@ -5,6 +5,10 @@ import com.mineru.webflux.domain.Post.Post
 import com.mineru.webflux.domain.User.User
 import lombok.*
 import org.hibernate.annotations.Comment
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.relational.core.mapping.Table
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.stereotype.Repository
 import javax.persistence.*
 
 @Builder
@@ -17,6 +21,7 @@ import javax.persistence.*
 @Table(name = "PostReply")
 class PostReply {
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnPosition(1)
     val id: Long? = null
@@ -38,4 +43,11 @@ class PostReply {
     @ManyToOne
     @ColumnPosition(4)
     val writer: User? = null
+}
+
+@Repository
+interface PostReplyRepository: JpaRepository<PostReply, Long?> {
+}
+
+interface PostReplyReactiveRepository: ReactiveCrudRepository<PostReply, Long?> {
 }

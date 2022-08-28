@@ -3,6 +3,10 @@ package com.mineru.webflux.domain.RefreshToken
 import com.mineru.webflux.annotation.ColumnPosition
 import lombok.*
 import org.hibernate.annotations.Comment
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.relational.core.mapping.Table
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.stereotype.Repository
 import javax.persistence.*
 
 @Builder
@@ -15,6 +19,7 @@ import javax.persistence.*
 @Table(name = "RefreshToken")
 class RefreshToken {
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnPosition(1)
     val id: Long? = null
@@ -28,4 +33,11 @@ class RefreshToken {
     @Column
     @ColumnPosition(3)
     val token: String? = null
+}
+
+@Repository
+interface RefreshTokenRepository: JpaRepository<RefreshToken, Long?> {
+}
+
+interface RefreshTokenReactiveRepository: ReactiveCrudRepository<RefreshToken, Long?> {
 }

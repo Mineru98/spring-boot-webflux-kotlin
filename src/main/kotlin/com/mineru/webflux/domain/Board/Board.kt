@@ -5,7 +5,17 @@ import com.mineru.webflux.domain.BoardCategory.BoardCategory
 import com.mineru.webflux.domain.User.User
 import lombok.*
 import org.hibernate.annotations.Comment
-import javax.persistence.*
+import org.springframework.data.jpa.repository.JpaRepository
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Column
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import org.springframework.data.relational.core.mapping.*
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.stereotype.Repository
 
 @Builder
 @AllArgsConstructor
@@ -17,6 +27,7 @@ import javax.persistence.*
 @Table(name = "Board")
 class Board {
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnPosition(1)
     val id: Long? = null
@@ -47,4 +58,11 @@ class Board {
     @ManyToOne
     @ColumnPosition(6)
     val manager: User? = null
+}
+
+@Repository
+interface BoardRepository: JpaRepository<Board, Long?> {
+}
+
+interface BoardReactiveRepository: ReactiveCrudRepository<Board, Long?> {
 }
